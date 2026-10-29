@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 
-import type { AddInvoiceRequest, Invoice } from "../../../models/invoice";
+import type { Invoice } from "../../../models/invoice";
 import type { Product } from "../../../models/product";
 import { Button } from "../../../components/Button";
 import Icon from "../../../components/Icon";
@@ -28,7 +28,7 @@ import {
   ThreeColumnFields,
   TwoColumnFields,
 } from "./styles";
-import { dateAtLocalMidnight } from "../../../utils";
+import { useCreateInvoiceMutation } from "../../../services/invoice";
 
 type InvoiceItemFormData = {
   name: string;
@@ -61,13 +61,10 @@ type CreateInvoiceFormData = {
 
 type CreateInvoiceProps = {
   handleCancel: () => void;
-  handleSave: (invoice: AddInvoiceRequest) => void;
 };
 
-export const CreateInvoice = ({
-  handleCancel,
-  handleSave,
-}: CreateInvoiceProps) => {
+export const CreateInvoice = ({ handleCancel }: CreateInvoiceProps) => {
+  const [createInvoice] = useCreateInvoiceMutation();
   const {
     control,
     handleSubmit,
@@ -151,7 +148,7 @@ export const CreateInvoice = ({
     data: CreateInvoiceFormData,
     status: Invoice["status"],
   ) => {
-    const issueDate = dateAtLocalMidnight(data.invoiceDate);
+    const issueDate = data.invoiceDate;
 
     const dueDate = new Date(issueDate);
     dueDate.setDate(dueDate.getDate() + Number(data.paymentTerms));
@@ -188,13 +185,13 @@ export const CreateInvoice = ({
       .filter(Boolean)
       .join(", ");
 
-    handleSave({
+    createInvoice({
       currency: "GBP",
       amountDue: amount,
       status,
       description: data.description,
       invoiceDate: issueDate,
-      paymentDue: dueDate,
+      paymentDue: dueDate.toISOString().split("T")[0],
       billTo: {
         name: data.billTo.name,
         email: data.billTo.email,
@@ -205,7 +202,9 @@ export const CreateInvoice = ({
         address: billFromAddress,
       },
       items: invoiceItems,
-    });
+    })
+      .unwrap()
+      .then(() => handleCancel());
   };
 
   const handleBackdropMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {

@@ -4,13 +4,13 @@ import type { User } from "./user";
 export type InvoiceStatus = "Paid" | "Pending" | "Draft";
 
 export type Invoice = {
-  id: string;
+  id: number;
   currency: string;
   status: InvoiceStatus;
   billFrom?: User;
   description?: string;
-  invoiceDate?: Date;
-  paymentDue?: Date;
+  invoiceDate?: string;
+  paymentDue?: string;
   billTo?: User;
   items?: Product[];
   amountDue?: number;
@@ -21,8 +21,8 @@ export type AddInvoiceRequest = {
   status: InvoiceStatus;
   billFrom?: User;
   description?: string;
-  invoiceDate?: Date;
-  paymentDue?: Date;
+  invoiceDate?: string;
+  paymentDue?: string;
   billTo?: User;
   items?: Product[];
   amountDue?: number;
@@ -33,8 +33,8 @@ export type EditInvoiceRequest = {
   status: InvoiceStatus;
   billFrom?: User;
   description?: string;
-  invoiceDate?: Date;
-  paymentDue?: Date;
+  invoiceDate?: string;
+  paymentDue?: string;
   billTo?: User;
   items?: Product[];
   amountDue?: number;

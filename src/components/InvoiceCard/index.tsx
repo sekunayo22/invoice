@@ -16,6 +16,8 @@ type InvoiceCardProps = {
 };
 
 export function InvoiceCard({ invoice }: InvoiceCardProps) {
+  console.log(invoice.paymentDue);
+
   const currencyFormatter = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: invoice?.currency,
@@ -24,7 +26,7 @@ export function InvoiceCard({ invoice }: InvoiceCardProps) {
     day: "2-digit",
     month: "short",
     year: "numeric",
-  }).format(invoice.paymentDue);
+  }).format(new Date(invoice.paymentDue!));
 
   return (
     <InvoiceCardRoot

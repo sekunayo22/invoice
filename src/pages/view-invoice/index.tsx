@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import type { EditInvoiceRequest, Invoice } from "../../models/invoice";
+import type { Invoice } from "../../models/invoice";
 import { invoices } from "../../data/invoices";
 import { Button } from "../../components/Button";
 import Icon from "../../components/Icon";
@@ -42,7 +42,7 @@ export default function ViewInvoice() {
   const handleGoBack = () => navigate(-1);
   const { id } = useParams();
   const invoice: Invoice =
-    invoices.find((item) => item.id === id) ?? invoices[0];
+    invoices.find((item) => item.id === Number(id)) ?? invoices[0];
   const currencyFormatter = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: invoice.currency,
@@ -53,10 +53,6 @@ export default function ViewInvoice() {
     year: "numeric",
   });
 
-  const handleSaveInvoice = (invoice: EditInvoiceRequest) => {
-    console.log("Edit successful", invoice);
-    setIsEditingInvoice(false);
-  };
   const handleDeleteInvoice = () => setIsDeletingInvoice(true);
   const handleEditInvoice = () => setIsEditingInvoice(true);
   const handleCancelEditInvoice = () => setIsEditingInvoice(false);
@@ -122,14 +118,14 @@ export default function ViewInvoice() {
                 <MetaLabel>Invoice Date</MetaLabel>
                 <MetaValue>
                   {invoice.invoiceDate
-                    ? dateFormatter.format(invoice.invoiceDate)
+                    ? dateFormatter.format(new Date(invoice.invoiceDate!))
                     : ""}
                 </MetaValue>
               </MetaBlock>
               <MetaBlock>
                 <MetaLabel>Payment Due</MetaLabel>
                 <MetaValue>
-                  {dateFormatter.format(invoice.paymentDue)}
+                  {dateFormatter.format(new Date(invoice.paymentDue!))}
                 </MetaValue>
               </MetaBlock>
             </InvoiceDates>
@@ -179,11 +175,7 @@ export default function ViewInvoice() {
         </DetailsCard>
       </ViewInvoiceContent>
       {isEditingInvoice && (
-        <EditInvoice
-          handleCancel={handleCancelEditInvoice}
-          handleSave={handleSaveInvoice}
-          invoice={invoice}
-        />
+        <EditInvoice handleCancel={handleCancelEditInvoice} invoice={invoice} />
       )}
       {isDeletingInvoice && (
         <DeleteInvoice

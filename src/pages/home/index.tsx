@@ -3,24 +3,14 @@ import { Header } from "../../components/Header";
 import { EmptyInvoice } from "../../components/EmptyInvoice";
 import { InvoiceCard } from "../../components/InvoiceCard";
 import { Sidebar } from "../../components/Sidebar";
-import { invoices } from "../../data/invoices";
-import type { AddInvoiceRequest } from "../../models/invoice";
 import { CreateInvoice } from "./CreateInvoice";
 import { StyledHome, Content, InvoiceList } from "./styles";
+import { useGetInvoicesQuery } from "../../services/invoice";
 
 function Home() {
-  const [homeInvoices, setHomeInvoices] = useState(invoices);
+  const { data: invoices } = useGetInvoicesQuery();
   const [isCreatingInvoice, setIsCreatingInvoice] = useState(false);
 
-  const handleSaveInvoice = (invoice: AddInvoiceRequest) => {
-    const id = `${invoice.billTo?.name
-      .replace(/\s/g, "")
-      .slice(0, 2)
-      .toUpperCase()}${String(Date.now()).slice(-4)}`;
-
-    setHomeInvoices((current) => [{ ...invoice, id }, ...current]);
-    setIsCreatingInvoice(false);
-  };
   const handleCreateInvoice = () => setIsCreatingInvoice(true);
   const handleCancelCreateInvoice = () => setIsCreatingInvoice(false);
 
@@ -29,24 +19,21 @@ function Home() {
       <Sidebar />
       <Content>
         <Header
-          invoiceCount={homeInvoices.length}
+          invoiceCount={invoices?.length ?? 0}
           handleNewInvoice={handleCreateInvoice}
         />
-        {homeInvoices.length === 0 ? (
+        {!invoices?.length ? (
           <EmptyInvoice />
         ) : (
           <InvoiceList>
-            {homeInvoices.map((invoice) => (
+            {invoices?.map((invoice) => (
               <InvoiceCard key={invoice.id} invoice={invoice} />
             ))}
           </InvoiceList>
         )}
       </Content>
       {isCreatingInvoice && (
-        <CreateInvoice
-          handleCancel={handleCancelCreateInvoice}
-          handleSave={handleSaveInvoice}
-        />
+        <CreateInvoice handleCancel={handleCancelCreateInvoice} />
       )}
     </StyledHome>
   );

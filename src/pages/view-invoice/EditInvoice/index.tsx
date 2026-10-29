@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 
-import type { EditInvoiceRequest, Invoice } from "../../../models/invoice";
+import type { Invoice } from "../../../models/invoice";
 import type { Product } from "../../../models/product";
 import { Button } from "../../../components/Button";
 import Icon from "../../../components/Icon";
@@ -28,11 +28,8 @@ import {
   ThreeColumnFields,
   TwoColumnFields,
 } from "./styles";
-import {
-  toDateInputValue,
-  getPaymentTerms,
-  dateAtLocalMidnight,
-} from "../../../utils";
+import { toDateInputValue, getPaymentTerms } from "../../../utils";
+import { useUpdateInvoiceMutation } from "../../../services/invoice";
 
 type InvoiceItemFormData = {
   name: string;
@@ -66,14 +63,10 @@ type EditInvoiceFormData = {
 type EditInvoiceProps = {
   handleCancel: () => void;
   invoice: Invoice;
-  handleSave: (invoice: EditInvoiceRequest) => void;
 };
 
-export const EditInvoice = ({
-  handleCancel,
-  handleSave,
-  invoice,
-}: EditInvoiceProps) => {
+export const EditInvoice = ({ handleCancel, invoice }: EditInvoiceProps) => {
+  const [updateInvoice] = useUpdateInvoiceMutation();
   const {
     control,
     handleSubmit,
@@ -182,7 +175,7 @@ export const EditInvoice = ({
     data: EditInvoiceFormData,
     status: Invoice["status"],
   ) => {
-    const issueDate = dateAtLocalMidnight(data.invoiceDate);
+    const issueDate = data.invoiceDate;
 
     const dueDate = new Date(issueDate);
     dueDate.setDate(dueDate.getDate() + Number(data.paymentTerms));
@@ -219,13 +212,13 @@ export const EditInvoice = ({
       .filter(Boolean)
       .join(", ");
 
-    handleSave({
+    updateInvoice({
       currency: invoice?.currency ?? "GBP",
       amountDue: amount,
       status,
       description: data.description,
       invoiceDate: issueDate,
-      paymentDue: dueDate,
+      paymentDue: dueDate.toISOString().split("T")[0],
       billFrom: {
         name: data.billFrom.name,
         address: billFromAddress,
@@ -236,7 +229,9 @@ export const EditInvoice = ({
         address: billToAddress,
       },
       items: invoiceItems,
-    });
+    })
+      .unwrap()
+      .then(() => handleCancel());
   };
 
   const handleBackdropMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {

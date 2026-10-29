@@ -2,10 +2,10 @@ import type { Invoice } from "../models/invoice";
 
 export const invoices: Invoice[] = [
   {
-    id: "RT3080",
+    id: 1,
     currency: "GBP",
     status: "Paid",
-    invoiceDate: new Date("2021-07-19"),
+    invoiceDate: "2021-07-19",
     billTo: {
       id: 1,
       name: "Jensen Huang",
@@ -16,7 +16,7 @@ export const invoices: Invoice[] = [
       country: "United Kingdom",
     },
     description: "Website Design, Development",
-    paymentDue: new Date("2021-08-19"),
+    paymentDue: "2021-08-19",
     amountDue: 1800.9,
     billFrom: {
       id: 1,
@@ -32,10 +32,10 @@ export const invoices: Invoice[] = [
     ],
   },
   {
-    id: "XM9141",
+    id: 2,
     currency: "GBP",
     status: "Pending",
-    invoiceDate: new Date("2021-08-21"),
+    invoiceDate: "2021-08-21",
     billFrom: {
       id: 2,
       name: "Alex Grim",
@@ -45,7 +45,7 @@ export const invoices: Invoice[] = [
       country: "",
     },
     description: "Banner Design, Email Design",
-    paymentDue: new Date("2021-09-20"),
+    paymentDue: "2021-09-20",
     amountDue: 556,
     billTo: {
       id: 2,
@@ -61,10 +61,10 @@ export const invoices: Invoice[] = [
     ],
   },
   {
-    id: "RG0314",
+    id: 3,
     currency: "GBP",
     status: "Paid",
-    invoiceDate: new Date("2021-09-01"),
+    invoiceDate: "2021-09-01",
     billFrom: {
       id: 3,
       name: "John Morrison",
@@ -74,7 +74,7 @@ export const invoices: Invoice[] = [
       country: "",
     },
     description: "Brand Identity, Design System",
-    paymentDue: new Date("2021-10-01"),
+    paymentDue: "2021-10-01",
     amountDue: 14002.33,
     billTo: {
       id: 3,
@@ -90,10 +90,10 @@ export const invoices: Invoice[] = [
     ],
   },
   {
-    id: "RT2080",
+    id: 4,
     currency: "GBP",
     status: "Pending",
-    invoiceDate: new Date("2021-09-12"),
+    invoiceDate: "2021-09-12",
     billFrom: {
       id: 4,
       name: "Alysa Werner",
@@ -103,7 +103,7 @@ export const invoices: Invoice[] = [
       country: "",
     },
     description: "Icon Design",
-    paymentDue: new Date("2021-10-12"),
+    paymentDue: "2021-10-12",
     amountDue: 102.04,
     billTo: {
       id: 4,
@@ -116,10 +116,10 @@ export const invoices: Invoice[] = [
     items: [{ name: "Icon Design", quantity: 4, price: 25.51, total: 102.04 }],
   },
   {
-    id: "AA1449",
+    id: 5,
     currency: "GBP",
     status: "Pending",
-    invoiceDate: new Date("2021-09-14"),
+    invoiceDate: "2021-09-14",
     billFrom: {
       id: 5,
       name: "Mellisa Clarke",
@@ -129,7 +129,7 @@ export const invoices: Invoice[] = [
       country: "",
     },
     description: "Mobile App Design, Prototype",
-    paymentDue: new Date("2021-10-14"),
+    paymentDue: "2021-10-14",
     amountDue: 4032.33,
     billTo: {
       id: 5,
@@ -150,10 +150,10 @@ export const invoices: Invoice[] = [
     ],
   },
   {
-    id: "TY9141",
+    id: 6,
     currency: "GBP",
     status: "Pending",
-    invoiceDate: new Date("2021-10-01"),
+    invoiceDate: "2021-10-01",
     billFrom: {
       id: 6,
       name: "Thomas Wayne",
@@ -163,7 +163,7 @@ export const invoices: Invoice[] = [
       country: "",
     },
     description: "Dashboard Design, Icon Set",
-    paymentDue: new Date("2021-10-31"),
+    paymentDue: "2021-10-31",
     amountDue: 6155.91,
     billTo: {
       id: 6,
@@ -184,10 +184,10 @@ export const invoices: Invoice[] = [
     ],
   },
   {
-    id: "FV2353",
+    id: 7,
     currency: "GBP",
     status: "Draft",
-    invoiceDate: new Date("2021-10-12"),
+    invoiceDate: "2021-10-12",
     billFrom: {
       id: 7,
       name: "Anita Wainwright",
@@ -197,7 +197,7 @@ export const invoices: Invoice[] = [
       country: "",
     },
     description: "Print Design, Illustration",
-    paymentDue: new Date("2021-11-12"),
+    paymentDue: "2021-11-12",
     amountDue: 3102.04,
     billTo: {
       id: 7,

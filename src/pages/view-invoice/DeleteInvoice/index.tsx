@@ -1,5 +1,6 @@
 import { Button } from "../../../components/Button";
 import type { Invoice } from "../../../models/invoice";
+import { useDeleteInvoiceMutation } from "../../../services/invoice";
 import {
   Backdrop,
   DeleteInvoiceForm,
@@ -14,26 +15,42 @@ interface DeleteInvoiceProps {
   handleCancel: () => void;
 }
 const DeleteInvoice = ({ invoice, handleCancel }: DeleteInvoiceProps) => {
+  const [deleteInvoice] = useDeleteInvoiceMutation();
   const handleBackdropMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       handleCancel();
     }
   };
+  const handleDeleteInvoice = () => {
+    deleteInvoice(invoice?.id)
+      .unwrap()
+      .then(() => handleCancel());
+  };
   return (
     <Backdrop onMouseDown={handleBackdropMouseDown}>
-        <DeleteInvoiceForm>
-          <DeleteInvoiceFormHeading>Confirm Deletion</DeleteInvoiceFormHeading>
-          <DeleteInvoiceFormDescription>
-            Are you sure you want to delete invoice #{invoice?.id} ? This action
-            cannot be undone.
-          </DeleteInvoiceFormDescription>
-          <DeleteInvoiceFormButtonsContainer>
-            <DeleteInvoiceFormButtons>
-              <Button handleClick={handleCancel} type="button" label="Cancel" variant="secondary" />
-              <Button type="button" label="Delete" variant="danger" />
-            </DeleteInvoiceFormButtons>
-          </DeleteInvoiceFormButtonsContainer>
-        </DeleteInvoiceForm>
+      <DeleteInvoiceForm>
+        <DeleteInvoiceFormHeading>Confirm Deletion</DeleteInvoiceFormHeading>
+        <DeleteInvoiceFormDescription>
+          Are you sure you want to delete invoice #{invoice?.id} ? This action
+          cannot be undone.
+        </DeleteInvoiceFormDescription>
+        <DeleteInvoiceFormButtonsContainer>
+          <DeleteInvoiceFormButtons>
+            <Button
+              handleClick={handleCancel}
+              type="button"
+              label="Cancel"
+              variant="secondary"
+            />
+            <Button
+              handleClick={handleDeleteInvoice}
+              type="button"
+              label="Delete"
+              variant="danger"
+            />
+          </DeleteInvoiceFormButtons>
+        </DeleteInvoiceFormButtonsContainer>
+      </DeleteInvoiceForm>
     </Backdrop>
   );
 };
