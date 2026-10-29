@@ -1,7 +1,7 @@
 import type { Product } from "./product";
 import type { User } from "./user";
 
-export type InvoiceStatus = "Paid" | "Pending" | "Draft";
+export type InvoiceStatus = "PAID" | "PENDING" | "DRAFT";
 
 export type Invoice = {
   id: number;

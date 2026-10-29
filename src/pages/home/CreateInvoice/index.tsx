@@ -218,7 +218,7 @@ export const CreateInvoice = ({ handleCancel }: CreateInvoiceProps) => {
       <Drawer role="dialog" aria-modal="true" aria-label="Create invoice">
         <CreateInvoiceForm
           id="create-invoice-form"
-          onSubmit={handleSubmit((data) => handleSaveInvoice(data, "Pending"))}
+          onSubmit={handleSubmit((data) => handleSaveInvoice(data, "PENDING"))}
         >
           <DrawerTitle>New Invoice</DrawerTitle>
 
@@ -455,7 +455,7 @@ export const CreateInvoice = ({ handleCancel }: CreateInvoiceProps) => {
                 type="button"
                 label="Save as Draft"
                 handleClick={handleSubmit((data) =>
-                  handleSaveInvoice(data, "Draft"),
+                  handleSaveInvoice(data, "DRAFT"),
                 )}
               />
 

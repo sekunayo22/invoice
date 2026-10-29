@@ -4,7 +4,7 @@ export const invoices: Invoice[] = [
   {
     id: 1,
     currency: "GBP",
-    status: "Paid",
+    status: "PAID",
     invoiceDate: "2021-07-19",
     billTo: {
       id: 1,
@@ -34,7 +34,7 @@ export const invoices: Invoice[] = [
   {
     id: 2,
     currency: "GBP",
-    status: "Pending",
+    status: "PENDING",
     invoiceDate: "2021-08-21",
     billFrom: {
       id: 2,
@@ -63,7 +63,7 @@ export const invoices: Invoice[] = [
   {
     id: 3,
     currency: "GBP",
-    status: "Paid",
+    status: "PAID",
     invoiceDate: "2021-09-01",
     billFrom: {
       id: 3,
@@ -92,7 +92,7 @@ export const invoices: Invoice[] = [
   {
     id: 4,
     currency: "GBP",
-    status: "Pending",
+    status: "PENDING",
     invoiceDate: "2021-09-12",
     billFrom: {
       id: 4,
@@ -118,7 +118,7 @@ export const invoices: Invoice[] = [
   {
     id: 5,
     currency: "GBP",
-    status: "Pending",
+    status: "PENDING",
     invoiceDate: "2021-09-14",
     billFrom: {
       id: 5,
@@ -152,7 +152,7 @@ export const invoices: Invoice[] = [
   {
     id: 6,
     currency: "GBP",
-    status: "Pending",
+    status: "PENDING",
     invoiceDate: "2021-10-01",
     billFrom: {
       id: 6,
@@ -186,7 +186,7 @@ export const invoices: Invoice[] = [
   {
     id: 7,
     currency: "GBP",
-    status: "Draft",
+    status: "DRAFT",
     invoiceDate: "2021-10-12",
     billFrom: {
       id: 7,
