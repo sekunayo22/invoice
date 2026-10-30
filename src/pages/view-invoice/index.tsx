@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import type { Invoice } from "../../models/invoice";
-import { invoices } from "../../data/invoices";
+import type { InvoiceStatus } from "../../models/invoice";
 import { Button } from "../../components/Button";
 import Icon from "../../components/Icon";
 import { Sidebar } from "../../components/Sidebar";
@@ -34,6 +33,7 @@ import {
 import type { IconNames } from "../../types/icon";
 import { EditInvoice } from "./EditInvoice";
 import DeleteInvoice from "./DeleteInvoice";
+import { useGetInvoiceByIdQuery } from "../../services/invoice";
 
 export default function ViewInvoice() {
   const [isDeletingInvoice, setIsDeletingInvoice] = useState(false);
@@ -41,11 +41,10 @@ export default function ViewInvoice() {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
   const { id } = useParams();
-  const invoice: Invoice =
-    invoices.find((item) => item.id === Number(id)) ?? invoices[0];
+  const {data: invoice} = useGetInvoiceByIdQuery(Number(id), {skip: !id})
   const currencyFormatter = new Intl.NumberFormat(undefined, {
     style: "currency",
-    currency: invoice.currency,
+    currency: invoice?.currency,
   });
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
     day: "2-digit",
@@ -72,9 +71,9 @@ export default function ViewInvoice() {
         <InvoiceStatusBar>
           <StatusGroup>
             <StatusLabel>Status</StatusLabel>
-            <StatusPill status={invoice.status}>
-              <Icon name={invoice.status.toLowerCase() as IconNames} />
-              {invoice.status}
+            <StatusPill status={invoice?.status as InvoiceStatus}>
+              <Icon name={invoice?.status.toLowerCase() as IconNames} />
+              {invoice?.status}
             </StatusPill>
           </StatusGroup>
           <InvoiceActions>
@@ -94,14 +93,14 @@ export default function ViewInvoice() {
           </InvoiceActions>
         </InvoiceStatusBar>
 
-        <DetailsCard aria-label={`Invoice ${invoice.id}`}>
+        <DetailsCard aria-label={`Invoice ${invoice?.id}`}>
           <InvoiceHeading>
             <p>
               <InvoiceIdentifier>
-                <span>#</span> {invoice.id}
+                <span>#</span> {invoice?.id}
               </InvoiceIdentifier>
               <InvoiceDescription>
-                {invoice.description ?? ""}
+                {invoice?.description ?? ""}
               </InvoiceDescription>
             </p>
             <SenderAddress>
@@ -117,7 +116,7 @@ export default function ViewInvoice() {
               <MetaBlock>
                 <MetaLabel>Invoice Date</MetaLabel>
                 <MetaValue>
-                  {invoice.invoiceDate
+                  {invoice?.invoiceDate
                     ? dateFormatter.format(new Date(invoice.invoiceDate!))
                     : ""}
                 </MetaValue>
@@ -125,7 +124,9 @@ export default function ViewInvoice() {
               <MetaBlock>
                 <MetaLabel>Payment Due</MetaLabel>
                 <MetaValue>
-                  {dateFormatter.format(new Date(invoice.paymentDue!))}
+                   {invoice?.paymentDue
+                    ? dateFormatter.format(new Date(invoice.paymentDue!))
+                    : ""}
                 </MetaValue>
               </MetaBlock>
             </InvoiceDates>
@@ -141,7 +142,7 @@ export default function ViewInvoice() {
             </MetaBlock>
             <MetaBlock>
               <MetaLabel>Bill To</MetaLabel>
-              <MetaValue>{invoice.billTo?.name ?? ""}</MetaValue>
+              <MetaValue>{invoice?.billTo?.name ?? ""}</MetaValue>
             </MetaBlock>
           </InvoiceMeta>
 
@@ -156,7 +157,7 @@ export default function ViewInvoice() {
                 </tr>
               </thead>
               <tbody>
-                {(invoice.items ?? []).map((item) => (
+                {(invoice?.items ?? []).map((item) => (
                   <tr key={item.name}>
                     <ItemCell>{item.name}</ItemCell>
                     <ItemCell>{item.quantity}</ItemCell>
@@ -170,7 +171,7 @@ export default function ViewInvoice() {
 
           <AmountDue>
             <span>Amount Due</span>
-            <strong>{currencyFormatter.format(invoice.amountDue ?? 0)}</strong>
+            <strong>{currencyFormatter.format(invoice?.amountDue ?? 0)}</strong>
           </AmountDue>
         </DetailsCard>
       </ViewInvoiceContent>

@@ -62,7 +62,7 @@ type EditInvoiceFormData = {
 
 type EditInvoiceProps = {
   handleCancel: () => void;
-  invoice: Invoice;
+  invoice: Invoice | undefined;
 };
 
 export const EditInvoice = ({ handleCancel, invoice }: EditInvoiceProps) => {

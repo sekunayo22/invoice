@@ -11,7 +11,7 @@ import {
 } from "./styles";
 
 interface DeleteInvoiceProps {
-  invoice: Invoice;
+  invoice: Invoice | undefined;
   handleCancel: () => void;
 }
 const DeleteInvoice = ({ invoice, handleCancel }: DeleteInvoiceProps) => {
@@ -22,7 +22,8 @@ const DeleteInvoice = ({ invoice, handleCancel }: DeleteInvoiceProps) => {
     }
   };
   const handleDeleteInvoice = () => {
-    deleteInvoice(invoice?.id)
+    if(!invoice) return
+    deleteInvoice(invoice.id)
       .unwrap()
       .then(() => handleCancel());
   };
