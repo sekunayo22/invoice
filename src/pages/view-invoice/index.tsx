@@ -41,10 +41,10 @@ export default function ViewInvoice() {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
   const { id } = useParams();
-  const {data: invoice} = useGetInvoiceByIdQuery(Number(id), {skip: !id})
+  const {data: invoice} = useGetInvoiceByIdQuery(Number(id))
   const currencyFormatter = new Intl.NumberFormat(undefined, {
     style: "currency",
-    currency: invoice?.currency,
+    currency: invoice?.currency || "GBP",
   });
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
     day: "2-digit",
@@ -56,6 +56,12 @@ export default function ViewInvoice() {
   const handleEditInvoice = () => setIsEditingInvoice(true);
   const handleCancelEditInvoice = () => setIsEditingInvoice(false);
   const handleCancelDeleteInvoice = () => setIsDeletingInvoice(false);
+
+  if(!invoice) {
+    return (
+      <h1>No data yet!. Kindly check the invoice id</h1>
+    )
+  }
 
   return (
     <ViewInvoicePageRoot>
