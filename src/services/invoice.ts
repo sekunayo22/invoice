@@ -13,16 +13,16 @@ export const invoiceApi = createApi({
   tagTypes: ["Invoices", "Invoice"],
   endpoints: (builder) => ({
     getInvoices: builder.query<Array<Invoice>, void>({
-      query: () => "/invoice",
+      query: () => "/invoices",
       providesTags: ["Invoice"],
     }),
     getInvoiceById: builder.query<Invoice, number>({
-      query: (id) => `/invoice/${id}`,
+      query: (id) => `/invoices/${id}`,
       providesTags: ["Invoice"],
     }),
     createInvoice: builder.mutation<string, AddInvoiceRequest>({
       query: (request) => ({
-        url: `/invoice`,
+        url: `/invoices`,
         method: "POST",
         body: request,
       }),
