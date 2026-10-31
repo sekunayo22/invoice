@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { Button } from "../../../components/Button";
 import type { Invoice } from "../../../models/invoice";
 import { useDeleteInvoiceMutation } from "../../../services/invoice";
@@ -16,16 +17,20 @@ interface DeleteInvoiceProps {
 }
 const DeleteInvoice = ({ invoice, handleCancel }: DeleteInvoiceProps) => {
   const [deleteInvoice] = useDeleteInvoiceMutation();
+  const navigate = useNavigate();
   const handleBackdropMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       handleCancel();
     }
   };
   const handleDeleteInvoice = () => {
-    if(!invoice) return
+    if (!invoice) return;
     deleteInvoice(invoice.id)
       .unwrap()
-      .then(() => handleCancel());
+      .then(() => {
+        handleCancel()
+        navigate("/")
+      });
   };
   return (
     <Backdrop onMouseDown={handleBackdropMouseDown}>

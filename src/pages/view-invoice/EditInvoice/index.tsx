@@ -36,6 +36,7 @@ type InvoiceItemFormData = {
   quantity: number;
   price: number;
   total: number;
+  id?: number;
 };
 
 type EditInvoiceFormData = {
@@ -162,6 +163,7 @@ export const EditInvoice = ({ handleCancel, invoice }: EditInvoiceProps) => {
       description: invoice.description ?? "",
       items: (invoice.items ?? []).map((item) => ({
         name: item.name,
+        id: item.id,
         quantity: Number(item.quantity) || 0,
         price: Number(item.price) || 0,
         total:
@@ -171,7 +173,7 @@ export const EditInvoice = ({ handleCancel, invoice }: EditInvoiceProps) => {
     });
   }, [invoice, reset]);
 
-  const handleSaveInvoice = (
+  const handleEditInvoice = (
     data: EditInvoiceFormData,
     status: Invoice["status"],
   ) => {
@@ -185,6 +187,7 @@ export const EditInvoice = ({ handleCancel, invoice }: EditInvoiceProps) => {
       const price = Number(item.price) || 0;
 
       return {
+        id: item.id,
         name: item.name,
         quantity,
         price,
@@ -194,41 +197,34 @@ export const EditInvoice = ({ handleCancel, invoice }: EditInvoiceProps) => {
 
     const amount = invoiceItems.reduce((sum, item) => sum + item.total, 0);
 
-    const billFromAddress = [
-      data.billFrom.address,
-      data.billFrom.city,
-      data.billFrom.postcode,
-      data.billFrom.country,
-    ]
-      .filter(Boolean)
-      .join(", ");
-
-    const billToAddress = [
-      data.billTo.address,
-      data.billTo.city,
-      data.billTo.postcode,
-      data.billTo.country,
-    ]
-      .filter(Boolean)
-      .join(", ");
-
     updateInvoice({
-      currency: invoice?.currency ?? "GBP",
-      amountDue: amount,
-      status,
-      description: data.description,
-      invoiceDate: issueDate,
-      paymentDue: dueDate.toISOString().split("T")[0],
-      billFrom: {
-        name: data.billFrom.name,
-        address: billFromAddress,
+      request: {
+        currency: invoice?.currency ?? "GBP",
+        amountDue: amount,
+        status,
+        description: data.description,
+        invoiceDate: issueDate,
+        paymentDue: dueDate.toISOString().split("T")[0],
+        billFrom: {
+          id: invoice?.billFrom?.id,
+          name: data.billFrom.name,
+          address: data.billFrom.address,
+          city: data.billFrom.city,
+          postcode: data.billFrom.postcode,
+          country: data.billFrom.country,
+        },
+        billTo: {
+          id: invoice?.billTo?.id,
+          name: data.billTo.name,
+          email: data.billTo.email,
+          address: data.billTo.address,
+          city: data.billTo.city,
+          postcode: data.billTo.postcode,
+          country: data.billTo.country,
+        },
+        items: invoiceItems,
       },
-      billTo: {
-        name: data.billTo.name,
-        email: data.billTo.email,
-        address: billToAddress,
-      },
-      items: invoiceItems,
+      id: invoice?.id!,
     })
       .unwrap()
       .then(() => handleCancel());
@@ -245,7 +241,7 @@ export const EditInvoice = ({ handleCancel, invoice }: EditInvoiceProps) => {
       <Drawer role="dialog" aria-modal="true" aria-label="Edit invoice">
         <EditInvoiceForm
           id="edit-invoice-form"
-          onSubmit={handleSubmit((data) => handleSaveInvoice(data, "PENDING"))}
+          onSubmit={handleSubmit((data) => handleEditInvoice(data, "PENDING"))}
         >
           <DrawerTitle>Edit Invoice</DrawerTitle>
 
@@ -482,7 +478,7 @@ export const EditInvoice = ({ handleCancel, invoice }: EditInvoiceProps) => {
                 type="button"
                 label="Save as Draft"
                 handleClick={handleSubmit((data) =>
-                  handleSaveInvoice(data, "DRAFT"),
+                  handleEditInvoice(data, "DRAFT"),
                 )}
               />
 

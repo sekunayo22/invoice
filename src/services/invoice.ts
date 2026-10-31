@@ -14,7 +14,7 @@ export const invoiceApi = createApi({
   endpoints: (builder) => ({
     getInvoices: builder.query<Array<Invoice>, void>({
       query: () => "/invoices",
-      providesTags: ["Invoice"],
+      providesTags: ["Invoices"],
     }),
     getInvoiceById: builder.query<Invoice, number>({
       query: (id) => `/invoices/${id}`,
@@ -25,21 +25,29 @@ export const invoiceApi = createApi({
         url: `/invoices`,
         method: "POST",
         body: request,
+        responseHandler: "text",
       }),
-      invalidatesTags: ["Invoice"],
+      invalidatesTags: ["Invoice", "Invoices"],
     }),
     deleteInvoice: builder.mutation<string, number>({
       query: (id) => ({
         url: `/invoices/${id}`,
         method: "DELETE",
+        responseHandler: "text",
       }),
+      invalidatesTags: ["Invoices"],
     }),
-    updateInvoice: builder.mutation<string, EditInvoiceRequest>({
-      query: (request) => ({
-        url: `/invoices`,
+    updateInvoice: builder.mutation<
+      string,
+      { request: EditInvoiceRequest; id: number }
+    >({
+      query: ({ request, id }) => ({
+        url: `/invoices/${id}`,
         method: "PUT",
         body: request,
+        responseHandler: "text",
       }),
+      invalidatesTags: ["Invoice", "Invoices"],
     }),
   }),
 });

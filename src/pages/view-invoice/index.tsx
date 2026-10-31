@@ -41,7 +41,11 @@ export default function ViewInvoice() {
   const navigate = useNavigate();
   const handleGoBack = () => navigate(-1);
   const { id } = useParams();
-  const {data: invoice} = useGetInvoiceByIdQuery(Number(id))
+  const {
+    data: invoice,
+    isLoading,
+    isFetching,
+  } = useGetInvoiceByIdQuery(Number(id));
   const currencyFormatter = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: invoice?.currency || "GBP",
@@ -57,10 +61,8 @@ export default function ViewInvoice() {
   const handleCancelEditInvoice = () => setIsEditingInvoice(false);
   const handleCancelDeleteInvoice = () => setIsDeletingInvoice(false);
 
-  if(!invoice) {
-    return (
-      <h1>No data yet!. Kindly check the invoice id</h1>
-    )
+  if (isLoading || isFetching) {
+    return <h1>Data is loading...</h1>;
   }
 
   return (
@@ -130,7 +132,7 @@ export default function ViewInvoice() {
               <MetaBlock>
                 <MetaLabel>Payment Due</MetaLabel>
                 <MetaValue>
-                   {invoice?.paymentDue
+                  {invoice?.paymentDue
                     ? dateFormatter.format(new Date(invoice.paymentDue!))
                     : ""}
                 </MetaValue>

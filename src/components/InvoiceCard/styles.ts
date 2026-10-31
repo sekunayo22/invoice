@@ -124,10 +124,13 @@ export const Amount = styled.p`
   }
 `;
 
-const statusColors: Record<InvoiceStatus, {color: string; background: string}> = {
-  "PAID": { color: accent01, background: accent03 },
-  "PENDING": { color: accent02, background: accent04 },
-  "DRAFT": { color: primary03, background: accent05 },
+const statusColors: Record<
+  InvoiceStatus,
+  { color: string; background: string }
+> = {
+  PAID: { color: accent01, background: accent03 },
+  PENDING: { color: accent02, background: accent04 },
+  DRAFT: { color: primary03, background: accent05 },
 };
 
 export const StatusBadge = styled.span<{

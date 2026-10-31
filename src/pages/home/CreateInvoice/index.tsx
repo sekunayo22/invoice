@@ -128,7 +128,6 @@ export const CreateInvoice = ({ handleCancel }: CreateInvoiceProps) => {
     name: "paymentTerms",
   });
 
-  // Keep each item's total in sync with its quantity and price.
   useEffect(() => {
     items?.forEach((item, index) => {
       const quantity = Number(item.quantity) || 0;
@@ -167,24 +166,6 @@ export const CreateInvoice = ({ handleCancel }: CreateInvoiceProps) => {
 
     const amount = invoiceItems.reduce((sum, item) => sum + item.total, 0);
 
-    const billFromAddress = [
-      data.billFrom.address,
-      data.billFrom.city,
-      data.billFrom.postcode,
-      data.billFrom.country,
-    ]
-      .filter(Boolean)
-      .join(", ");
-
-    const billToAddress = [
-      data.billTo.address,
-      data.billTo.city,
-      data.billTo.postcode,
-      data.billTo.country,
-    ]
-      .filter(Boolean)
-      .join(", ");
-
     createInvoice({
       currency: "GBP",
       amountDue: amount,
@@ -192,14 +173,20 @@ export const CreateInvoice = ({ handleCancel }: CreateInvoiceProps) => {
       description: data.description,
       invoiceDate: issueDate,
       paymentDue: dueDate.toISOString().split("T")[0],
+      billFrom: {
+        name: data.billFrom.name,
+        address: data.billFrom.address,
+        city: data.billFrom.city,
+        postcode: data.billFrom.postcode,
+        country: data.billFrom.country,
+      },
       billTo: {
         name: data.billTo.name,
         email: data.billTo.email,
-        address: billToAddress,
-      },
-      billFrom: {
-        name: data.billFrom.name,
-        address: billFromAddress,
+        address: data.billTo.address,
+        city: data.billTo.city,
+        postcode: data.billTo.postcode,
+        country: data.billTo.country,
       },
       items: invoiceItems,
     })

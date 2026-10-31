@@ -120,9 +120,9 @@ const statusColors: Record<
   InvoiceStatus,
   { color: string; background: string }
 > = {
-  "PAID": { color: accent01, background: accent03 },
-  "PENDING": { color: accent02, background: accent04 },
-  "DRAFT": { color: primary03, background: accent05 },
+  PAID: { color: accent01, background: accent03 },
+  PENDING: { color: accent02, background: accent04 },
+  DRAFT: { color: primary03, background: accent05 },
 };
 
 export const StatusPill = styled.span<{ status: InvoiceStatus }>`
