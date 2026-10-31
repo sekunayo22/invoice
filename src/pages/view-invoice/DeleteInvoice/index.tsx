@@ -28,8 +28,8 @@ const DeleteInvoice = ({ invoice, handleCancel }: DeleteInvoiceProps) => {
     deleteInvoice(invoice.id)
       .unwrap()
       .then(() => {
-        handleCancel()
-        navigate("/")
+        handleCancel();
+        navigate("/");
       });
   };
   return (
